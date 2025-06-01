@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Interativo: Comparativo de Fones KZ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #F8F5F2;
+            --text-color: #2D3748;
+            --primary-color: #4A5568;
+            --accent-color-1: #4DB6AC; /* ZS10 */
+            --accent-color-2: #64B5F6; /* D-FI */
+            --accent-color-3: #FFB74D; /* Libra */
+            --accent-color-4: #F06292; /* EDX */
+            --card-bg: #FFFFFF;
+            --border-color: #E2E8F0;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            scroll-behavior: smooth;
+        }
+        .nav-link {
+            transition: color 0.3s, border-color 0.3s;
+        }
+        .nav-link.active, .nav-link:hover {
+            color: var(--accent-color-1);
+            border-bottom-color: var(--accent-color-1);
+        }
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            transition: background-color 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #2D3748;
+        }
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 40vh;
+            width: 100%;
+            max-width: 500px;
+            max-height: 400px;
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: var(--accent-color-1);
+        }
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+        .persona-card.active {
+            border-color: var(--accent-color-1);
+            box-shadow: 0 0 15px rgba(77, 182, 172, 0.5);
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-gray-800">KZ Guia Interativo</h1>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#overview" class="nav-link px-3 py-2 text-sm font-medium border-b-2 border-transparent">Visão Geral</a>
+                        <a href="#tech-specs" class="nav-link px-3 py-2 text-sm font-medium border-b-2 border-transparent">Comparativo Técnico</a>
+                        <a href="#sound-analysis" class="nav-link px-3 py-2 text-sm font-medium border-b-2 border-transparent">Análise Sonora</a>
+                        <a href="#recommendations" class="nav-link px-3 py-2 text-sm font-medium border-b-2 border-transparent">Recomendações</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+
+        <section id="overview" class="text-center mb-16 md:mb-24">
+            <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Qual o seu som KZ ideal?</h2>
+            <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-600">Compare quatro dos modelos mais populares da Knowledge Zenith e descubra qual se encaixa perfeitamente nas suas preferências auditivas.</p>
+        </section>
+
+        <section id="tech-specs" class="mb-16 md:mb-24">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold tracking-tight text-gray-900">Comparativo Técnico</h2>
+                <p class="mt-2 text-lg text-gray-600">Selecione os modelos para comparar suas especificações lado a lado.</p>
+                <div id="model-selector" class="mt-6 flex justify-center flex-wrap gap-2"></div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky left-0 bg-gray-50 z-10">Característica</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tech-table-body" class="bg-white divide-y divide-gray-200">
+                    </tbody>
+                </table>
+            </div>
+            <p class="text-xs text-center mt-4 text-gray-500">* Informações baseadas em dados de fabricantes e reviews, sujeitas a variações de lote.</p>
+        </section>
+
+
+        <section id="sound-analysis" class="mb-16 md:mb-24">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold tracking-tight text-gray-900">Análise Sonora</h2>
+                <p class="mt-2 text-lg text-gray-600">Explore o perfil sonoro de cada modelo. Clique em um modelo para ver sua assinatura no gráfico e a análise detalhada.</p>
+                <div id="sound-model-selector" class="mt-6 flex justify-center flex-wrap gap-4"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                <div class="chart-container">
+                    <canvas id="soundProfileChart"></canvas>
+                </div>
+                <div id="sound-analysis-content" class="fade-in">
+                    <h3 id="sound-model-name" class="text-2xl font-bold mb-4 text-gray-800">Selecione um modelo</h3>
+                    <div id="zs10-controls" class="hidden mb-6 p-4 border rounded-lg bg-gray-50">
+                        <h4 class="font-semibold mb-3 text-gray-700">Ajustes do ZS10 PRO 2</h4>
+                        <div class="flex flex-wrap gap-x-6 gap-y-3 items-center">
+                            <span class="font-medium text-sm">Graves:</span>
+                            <label class="flex items-center space-x-2 cursor-pointer"><input type="radio" name="bass-switch" value="0" checked class="form-radio text-teal-600"><span>Padrão</span></label>
+                            <label class="flex items-center space-x-2 cursor-pointer"><input type="radio" name="bass-switch" value="1" class="form-radio text-teal-600"><span>+1</span></label>
+                            <label class="flex items-center space-x-2 cursor-pointer"><input type="radio" name="bass-switch" value="2" class="form-radio text-teal-600"><span>+2</span></label>
+                            <label class="flex items-center space-x-2 cursor-pointer"><input type="radio" name="bass-switch" value="3" class="form-radio text-teal-600"><span>+3</span></label>
+                        </div>
+                        <div class="flex flex-wrap gap-x-6 gap-y-2 items-center mt-3">
+                            <span class="font-medium text-sm">Agudos:</span>
+                             <label class="switch">
+                                <input type="checkbox" id="treble-switch">
+                                <span class="slider"></span>
+                            </label>
+                            <span class="ml-2 text-sm text-gray-600">Suavizar (-1 nível)</span>
+                        </div>
+                    </div>
+                    <div id="sound-text-content" class="space-y-4 text-gray-700 leading-relaxed">
+                        <p>Use os botões acima para carregar os dados de um fone.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="recommendations">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold tracking-tight text-gray-900">Qual o seu perfil?</h2>
+                <p class="mt-2 text-lg text-gray-600">Descubra qual fone é a recomendação ideal para o seu gosto e necessidade. Clique em um perfil para ver a sugestão.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div id="persona-1" class="persona-card card p-6 text-center cursor-pointer rounded-xl">
+                    <div class="text-4xl mb-3">🎧</div>
+                    <h3 class="font-semibold text-lg mb-2">Entusiasta da Versatilidade</h3>
+                    <p class="text-sm text-gray-600">Gosta de ajustar o som para cada música e busca um fone para tudo, de música a jogos.</p>
+                </div>
+                 <div id="persona-2" class="persona-card card p-6 text-center cursor-pointer rounded-xl">
+                    <div class="text-4xl mb-3">🧐</div>
+                    <h3 class="font-semibold text-lg mb-2">Audiófilo Analítico</h3>
+                    <p class="text-sm text-gray-600">Prioriza detalhes, clareza e um palco sonoro amplo para uma audição crítica.</p>
+                </div>
+                <div id="persona-3" class="persona-card card p-6 text-center cursor-pointer rounded-xl">
+                    <div class="text-4xl mb-3">⚖️</div>
+                    <h3 class="font-semibold text-lg mb-2">Amante do Som Equilibrado</h3>
+                    <p class="text-sm text-gray-600">Prefere uma sonoridade mais natural e neutra, fugindo de graves e agudos exagerados.</p>
+                </div>
+                 <div id="persona-4" class="persona-card card p-6 text-center cursor-pointer rounded-xl">
+                    <div class="text-4xl mb-3">🚀</div>
+                    <h3 class="font-semibold text-lg mb-2">Iniciante com Energia</h3>
+                    <p class="text-sm text-gray-600">Busca o primeiro bom fone, com som divertido, graves presentes e um ótimo custo-benefício.</p>
+                </div>
+            </div>
+            <div id="recommendation-details" class="mt-8 p-6 bg-white rounded-xl shadow-lg border border-gray-200 hidden fade-in">
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="mt-24 bg-gray-100 border-t border-gray-200">
+        <div class="container mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-500">
+            <p>Aplicação interativa criada com base no relatório "Análise Comparativa Detalhada dos IEMs KZ".</p>
+            <p>&copy; 2025 Guia Interativo KZ. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            const data = {
+                models: [
+                    { 
+                        id: 'zs10pro2', 
+                        name: 'ZS10 PRO 2', 
+                        color: 'var(--accent-color-1)',
+                        specs: {
+                            'Configuração': '1DD (10mm) + 4BA',
+                            'Impedância (Ω)': '25-28',
+                            'Sensibilidade (dB)': '108 ± 3',
+                            'Freq. Resposta (Hz-kHz)': '20-40k'
+                        },
+                        sound: {
+                            base: { 'Graves': 6, 'Médios': 6, 'Agudos': 8, 'Palco': 8, 'Detalhes': 8 },
+                            bassLevels: [0, 1.0, 1.5, 2.0],
+                            trebleModifier: -1.0,
+                            description: `
+                                <h4 class="font-bold text-lg mb-2">Som Energético e Customizável</h4>
+                                <p class="mb-2"><strong>Geral:</strong> Um som dinâmico com assinatura "V" personalizável via switches. Ótimo para múltiplos usos, incluindo jogos, devido à sua clareza e detalhamento.</p>
+                                <p class="mb-2"><strong>Graves:</strong> Podem variar de controlados a muito impactantes, dependendo da configuração dos switches. Com reforço, tornam-se robustos e satisfatórios.</p>
+                                <p class="mb-2"><strong>Médios:</strong> Podem soar um pouco recuados (típico do V-shape), mas oferecem bom detalhe e resolução para o preço. A coerência entre os drivers é o principal desafio.</p>
+                                <p class="mb-2"><strong>Agudos:</strong> Extensos e detalhados. O switch dedicado permite suavizar picos, tornando-os mais agradáveis para ouvidos sensíveis.</p>
+                                <p><strong>Palco e Detalhes:</strong> Elogiado pelo bom detalhamento, separação instrumental e um palco sonoro relativamente expansivo.</p>`
+                        },
+                        recommendation: {
+                            personaId: 'persona-1',
+                            title: 'Recomendação: KZ ZS10 PRO 2',
+                            text: 'Para quem valoriza versatilidade, este é o fone ideal. As chaves de ajuste permitem moldar o som ao seu gosto, seja para um grave potente em músicas eletrônicas ou um perfil mais equilibrado para rock. Sua capacidade técnica também o torna uma excelente escolha para jogos, onde a clareza e o posicionamento são cruciais.'
+                        }
+                    },
+                    { 
+                        id: 'dfi', 
+                        name: 'D-FI (Standard)',
+                        color: 'var(--accent-color-2)',
+                        specs: {
+                            'Configuração': '1DD (10mm)',
+                            'Impedância (Ω)': '23.5',
+                            'Sensibilidade (dB)': '110 ± 3',
+                            'Freq. Resposta (Hz-kHz)': '7-45k'
+                        },
+                        sound: {
+                            base: { 'Graves': 7, 'Médios': 8, 'Agudos': 6, 'Palco': 6, 'Detalhes': 6 },
+                             description: `
+                                <h4 class="font-bold text-lg mb-2">Equilíbrio e Naturalidade</h4>
+                                <p class="mb-2"><strong>Geral:</strong> Representa um afastamento do som "V" tradicional da KZ, buscando um perfil mais equilibrado e neutro-quente, com assinatura em "U" suave. Construção metálica robusta.</p>
+                                <p class="mb-2"><strong>Graves:</strong> Presentes e controlados, com bom corpo e textura, mas sem o impacto avassalador de outros modelos. Focam mais nos médio-graves do que nos sub-graves.</p>
+                                <p class="mb-2"><strong>Médios:</strong> Considerados o ponto forte. São naturais, bem posicionados e detalhados, tornando vocais e instrumentos agradáveis e realistas.</p>
+                                <p class="mb-2"><strong>Agudos:</strong> Suaves, arejados e livres de aspereza, ideais para longas sessões de audição sem fadiga. Podem soar um pouco contidos para quem gosta de muito brilho.</p>
+                                <p><strong>Palco e Detalhes:</strong> O palco sonoro é mais íntimo e as tecnicalidades (detalhes, separação) são consideradas medianas para a categoria, mas a coerência sonora é excelente.</p>`
+                        },
+                         recommendation: {
+                            personaId: 'persona-3',
+                            title: 'Recomendação: KZ D-FI (Standard)',
+                            text: 'Se você está cansado de fones com graves e agudos exagerados, o D-FI é a sua porta de entrada para um som mais maduro e equilibrado. Sua assinatura sonora mais contida e natural é perfeita para longas sessões de audição e para gêneros como jazz, acústico e rock clássico, onde a fidelidade dos médios é essencial.'
+                        }
+                    },
+                    { 
+                        id: 'libra', 
+                        name: 'Libra (High-Res)',
+                        color: 'var(--accent-color-3)',
+                        specs: {
+                            'Configuração': '1DD (ultra-wide)',
+                            'Impedância (Ω)': '25',
+                            'Sensibilidade (dB)': '108',
+                            'Freq. Resposta (Hz-kHz)': '20-40k'
+                        },
+                        sound: {
+                            base: { 'Graves': 5, 'Médios': 9, 'Agudos': 8, 'Palco': 7, 'Detalhes': 9 },
+                             description: `
+                                <h4 class="font-bold text-lg mb-2">Foco em Clareza e Resolução</h4>
+                                <p class="mb-2"><strong>Geral:</strong> Focado em entregar o máximo de detalhes e clareza. Possui um som mais brilhante e analítico, com ênfase na resolução em detrimento do impacto dos graves.</p>
+                                <p class="mb-2"><strong>Graves:</strong> Intencionalmente contidos e rápidos para não ofuscar as outras frequências. Batem apenas quando a música exige, com precisão e controle.</p>
+                                <p class="mb-2"><strong>Médios:</strong> Altamente detalhados, claros e sem "véus". Vocais femininos e instrumentos acústicos brilham com uma naturalidade impressionante.</p>
+                                <p class="mb-2"><strong>Agudos:</strong> Extensos e muito claros, revelando micro-detalhes nas gravações. Podem soar um pouco brilhantes ou analíticos para alguns, beneficiando-se de um bom DAC/DAP.</p>
+                                <p><strong>Palco e Detalhes:</strong> A resolução e a recuperação de detalhes são seus maiores trunfos, superando fones mais caros. O palco sonoro é bom, mas o destaque é a imagem e separação precisa.</p>`
+                        },
+                        recommendation: {
+                            personaId: 'persona-2',
+                            title: 'Recomendação: KZ Libra (High-Res)',
+                            text: 'Para o ouvinte que busca extrair cada nuance da gravação, o Libra é a ferramenta certa. Seu perfil analítico e focado em resolução revela micro-detalhes que passam despercebidos em outros fones. É ideal para música clássica, jazz, e faixas bem produzidas, onde a clareza e a separação instrumental são primordiais.'
+                        }
+                    },
+                    { 
+                        id: 'edxprox', 
+                        name: 'EDX PRO X',
+                        color: 'var(--accent-color-4)',
+                        specs: {
+                            'Configuração': '1DD (super-linear)',
+                            'Impedância (Ω)': '23 ± 3',
+                            'Sensibilidade (dB)': '108 ± 3',
+                            'Freq. Resposta (Hz-kHz)': '20-40k'
+                        },
+                        sound: {
+                            base: { 'Graves': 8, 'Médios': 6, 'Agudos': 7, 'Palco': 5, 'Detalhes': 6 },
+                             description: `
+                                <h4 class="font-bold text-lg mb-2">Som Divertido com Ótimo Custo-Benefício</h4>
+                                <p class="mb-2"><strong>Geral:</strong> O clássico som "V-shape" divertido e energético. É o ponto de entrada perfeito para o mundo dos IEMs, com um som que agrada imediatamente a maioria dos ouvintes.</p>
+                                <p class="mb-2"><strong>Graves:</strong> Proeminentes, potentes e com bom impacto. Ideal para gêneros como hip-hop, pop e eletrônica, onde a batida é fundamental.</p>
+                                <p class="mb-2"><strong>Médios:</strong> Recuados em comparação com graves e agudos, mas ainda com presença suficiente para que os vocais soem claros e agradáveis.</p>
+                                <p class="mb-2"><strong>Agudos:</strong> Energéticos e com boa extensão, trazendo detalhe e vivacidade à música. Podem ser um pouco ásperos em volumes muito altos ou em gravações de baixa qualidade.</p>
+                                <p><strong>Palco e Detalhes:</strong> O palco sonoro é um de seus pontos mais fracos, sendo mais íntimo. A resolução é boa para o preço, mas não é seu foco.</p>`
+                        },
+                        recommendation: {
+                            personaId: 'persona-4',
+                            title: 'Recomendação: KZ EDX PRO X',
+                            text: 'Se você está começando no mundo dos fones de alta fidelidade ou tem um orçamento limitado, o EDX PRO X é imbatível. Ele entrega um som animado, com graves fortes e uma energia contagiante que torna qualquer música mais divertida, tudo isso por um preço extremamente acessível.'
+                        }
+                    }
+                ],
+                techSpecFeatures: ['Configuração', 'Impedância (Ω)', 'Sensibilidade (dB)', 'Freq. Resposta (Hz-kHz)']
+            };
+
+            const modelSelector = document.getElementById('model-selector');
+            const tableBody = document.getElementById('tech-table-body');
+            const tableHeadRow = document.querySelector('#tech-specs thead tr');
+
+            const soundModelSelector = document.getElementById('sound-model-selector');
+            const soundModelName = document.getElementById('sound-model-name');
+            const soundTextContent = document.getElementById('sound-text-content');
+            const zs10Controls = document.getElementById('zs10-controls');
+            const trebleSwitch = document.getElementById('treble-switch');
+            const bassSwitches = document.querySelectorAll('input[name="bass-switch"]');
+            
+            const recommendationDetails = document.getElementById('recommendation-details');
+
+            let selectedModels = new Set(data.models.map(m => m.id));
+            let soundChart = null;
+            let activeSoundModel = null;
+            
+            function createModelSelectorButton(model, container, onClick) {
+                const button = document.createElement('button');
+                button.dataset.modelId = model.id;
+                button.className = `px-4 py-2 text-sm font-medium rounded-md border transition-all duration-200`;
+                button.textContent = model.name;
+                button.style.borderColor = model.color;
+                
+                function setActive(isActive) {
+                     if (isActive) {
+                        button.style.backgroundColor = model.color;
+                        button.style.color = 'white';
+                    } else {
+                        button.style.backgroundColor = 'transparent';
+                        button.style.color = model.color;
+                    }
+                }
+                
+                button.addEventListener('click', () => onClick(model, button));
+                container.appendChild(button);
+                return { button, setActive };
+            }
+
+            function setupTechSpecs() {
+                data.models.forEach(model => {
+                    const { button, setActive } = createModelSelectorButton(model, modelSelector, (clickedModel, btn) => {
+                        if (selectedModels.has(clickedModel.id)) {
+                            selectedModels.delete(clickedModel.id);
+                        } else {
+                            selectedModels.add(clickedModel.id);
+                        }
+                        setActive(selectedModels.has(clickedModel.id));
+                        renderTechTable();
+                    });
+                     setActive(selectedModels.has(model.id)); // Corrected: use model.id here
+                });
+                renderTechTable();
+            }
+
+            function renderTechTable() {
+                while (tableHeadRow.children.length > 1) {
+                    tableHeadRow.removeChild(tableHeadRow.lastChild);
+                }
+                tableBody.innerHTML = '';
+
+                const modelsToDisplay = data.models.filter(m => selectedModels.has(m.id));
+
+                modelsToDisplay.forEach(model => {
+                    const th = document.createElement('th');
+                    th.scope = 'col';
+                    th.className = 'px-6 py-3 text-left text-xs font-medium uppercase tracking-wider';
+                    th.style.color = model.color;
+                    th.textContent = model.name;
+                    tableHeadRow.appendChild(th);
+                });
+
+                data.techSpecFeatures.forEach(feature => {
+                    const row = document.createElement('tr');
+                    const featureCell = document.createElement('td');
+                    featureCell.className = 'px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10';
+                    featureCell.textContent = feature;
+                    row.appendChild(featureCell);
+
+                    modelsToDisplay.forEach(model => {
+                        const valueCell = document.createElement('td');
+                        valueCell.className = 'px-6 py-4 whitespace-nowrap text-sm text-gray-500';
+                        valueCell.textContent = model.specs[feature] || '-';
+                        row.appendChild(valueCell);
+                    });
+                    tableBody.appendChild(row);
+                });
+            }
+
+            function setupSoundAnalysis() {
+                const soundButtons = {};
+
+                data.models.forEach(model => {
+                    const { button, setActive } = createModelSelectorButton(model, soundModelSelector, (m, b) => {
+                        Object.values(soundButtons).forEach(btnObj => btnObj.setActive(false));
+                        setActive(true);
+                        updateSoundAnalysis(m.id);
+                    });
+                    soundButtons[model.id] = { button, setActive };
+                });
+
+                const ctx = document.getElementById('soundProfileChart').getContext('2d');
+                soundChart = new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels: ['Graves', 'Médios', 'Agudos', 'Palco', 'Detalhes'],
+                        datasets: []
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        responsive: true,
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                max: 10,
+                                grid: { color: 'rgba(0, 0, 0, 0.1)' },
+                                angleLines: { color: 'rgba(0, 0, 0, 0.1)' },
+                                pointLabels: {
+                                    font: { size: 14, weight: '500' },
+                                    color: '#4A5568'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: { display: false }
+                        }
+                    }
+                });
+            }
+            
+            function updateSoundAnalysis(modelId) {
+                activeSoundModel = data.models.find(m => m.id === modelId);
+                if (!activeSoundModel) return;
+                
+                soundModelName.textContent = activeSoundModel.name;
+                soundTextContent.innerHTML = activeSoundModel.sound.description;
+                soundTextContent.parentElement.classList.remove('fade-in');
+                void soundTextContent.parentElement.offsetWidth;
+                soundTextContent.parentElement.classList.add('fade-in');
+
+                zs10Controls.classList.toggle('hidden', modelId !== 'zs10pro2');
+
+                updateChartForModel();
+            }
+
+            function updateChartForModel() {
+                if (!activeSoundModel) return;
+
+                let soundData = {...activeSoundModel.sound.base};
+
+                if (activeSoundModel.id === 'zs10pro2') {
+                    const bassLevel = parseInt(document.querySelector('input[name="bass-switch"]:checked').value);
+                    const isTrebleTuned = trebleSwitch.checked;
+                    
+                    soundData['Graves'] += activeSoundModel.sound.bassLevels[bassLevel];
+                    if(isTrebleTuned) {
+                        soundData['Agudos'] += activeSoundModel.sound.trebleModifier;
+                    }
+                }
+                
+                const dataset = {
+                    label: activeSoundModel.name,
+                    data: Object.values(soundData),
+                    backgroundColor: hexToRgba(activeSoundModel.color, 0.2),
+                    borderColor: activeSoundModel.color,
+                    borderWidth: 2,
+                    pointBackgroundColor: activeSoundModel.color,
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: activeSoundModel.color
+                };
+
+                soundChart.data.datasets = [dataset];
+                soundChart.update();
+            }
+
+            function setupRecommendations() {
+                document.querySelectorAll('.persona-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        document.querySelectorAll('.persona-card').forEach(c => c.classList.remove('active'));
+                        card.classList.add('active');
+
+                        const recommendedModel = data.models.find(model => model.recommendation && model.recommendation.personaId === card.id);
+                        
+                        if (recommendedModel) {
+                            const recommendation = recommendedModel.recommendation;
+                            recommendationDetails.innerHTML = `
+                                <h3 class="font-bold text-xl mb-2" style="color: ${recommendedModel.color};">${recommendation.title}</h3>
+                                <p class="text-gray-700">${recommendation.text}</p>
+                            `;
+                            recommendationDetails.classList.remove('hidden');
+                        } else {
+                             recommendationDetails.innerHTML = '<p class="text-gray-700">Recomendação não encontrada.</p>';
+                             recommendationDetails.classList.remove('hidden');
+                        }
+                    });
+                });
+            }
+            
+            [...bassSwitches, trebleSwitch].forEach(el => {
+                el.addEventListener('change', () => {
+                    if(activeSoundModel && activeSoundModel.id === 'zs10pro2') {
+                        updateChartForModel();
+                    }
+                });
+            });
+
+            function hexToRgba(hex, alpha) {
+                let r = 0, g = 0, b = 0;
+                if (hex.match(/^#([A-Fa-f0-9]{3}){1,2}$/)) {
+                    const c = hex.substring(1).split('');
+                    if (c.length == 3) {
+                        r = parseInt(c[0] + c[0], 16);
+                        g = parseInt(c[1] + c[1], 16);
+                        b = parseInt(c[2] + c[2], 16);
+                    } else {
+                         r = parseInt(c[0] + c[1], 16);
+                         g = parseInt(c[2] + c[3], 16);
+                         b = parseInt(c[4] + c[5], 16);
+                    }
+                } else {
+                    const cssVarName = hex.match(/--[a-zA-Z0-9-]+/);
+                    if (cssVarName && cssVarName[0]) {
+                        const computedColor = getComputedStyle(document.documentElement).getPropertyValue(cssVarName[0]).trim();
+                        return hexToRgba(computedColor, alpha);
+                    } else {
+                        console.error("Invalid color format for hexToRgba:", hex);
+                        return `rgba(0,0,0,${alpha})`; 
+                    }
+                }
+                return `rgba(${r},${g},${b},${alpha})`;
+            }
+
+            setupTechSpecs();
+            setupSoundAnalysis();
+            setupRecommendations();
+
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            window.onscroll = () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if(pageYOffset >= sectionTop - 80) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if(link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
+                })
+            }
+        });
+    </script>
+</body>
+</html>
