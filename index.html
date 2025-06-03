@@ -11,15 +11,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #F8F5F2;
-            --text-color: #2D3748;
-            --primary-color: #4A5568;
-            --accent-color-1: #4DB6AC; /* ZS10 */
-            --accent-color-2: #64B5F6; /* D-FI */
-            --accent-color-3: #FFB74D; /* Libra */
-            --accent-color-4: #F06292; /* EDX */
+            --bg-color: #F9FAFB; /* Ligeiramente mais claro */
+            --text-color: #1F2937; /* Mais escuro para contraste */
+            --primary-color: #374151; /* Um cinza mais profundo */
+            --accent-color-1: #10B981; /* ZS10 - Verde Esmeralda */
+            --accent-color-2: #3B82F6; /* D-FI - Azul Vibrante */
+            --accent-color-3: #F59E0B; /* Libra - Âmbar */
+            --accent-color-4: #EC4899; /* EDX - Rosa Pink */
+            --accent-color-5: #8B5CF6; /* Castor Pro - Violeta */
             --card-bg: #FFFFFF;
-            --border-color: #E2E8F0;
+            --border-color: #D1D5DB; /* Borda mais suave */
+            --hover-glow-color: rgba(59, 130, 246, 0.1); /* Brilho azulado suave */
         }
         body {
             font-family: 'Inter', sans-serif;
@@ -28,36 +30,47 @@
             scroll-behavior: smooth;
         }
         .nav-link {
-            transition: color 0.3s, border-color 0.3s;
+            transition: color 0.3s, border-color 0.3s, background-color 0.3s;
+            border-radius: 0.375rem; /* rounded-md */
         }
         .nav-link.active, .nav-link:hover {
             color: var(--accent-color-1);
+            /* background-color: rgba(16, 185, 129, 0.1); */
             border-bottom-color: var(--accent-color-1);
         }
         .card {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
-            transition: transform 0.3s, box-shadow 0.3s;
+            border-radius: 0.75rem; /* rounded-xl */
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
         }
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 0 2px var(--hover-glow-color);
         }
         .btn-primary {
             background-color: var(--primary-color);
             color: white;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.2s;
+            border-radius: 0.5rem; /* rounded-lg */
+            padding: 0.625rem 1.25rem; /* py-2.5 px-5 */
         }
         .btn-primary:hover {
-            background-color: #2D3748;
+            background-color: #1F2937; /* Darker shade of primary */
+            transform: translateY(-2px);
         }
         .chart-container {
             position: relative;
             margin: auto;
-            height: 40vh;
+            height: 45vh; /* Aumentado um pouco */
             width: 100%;
-            max-width: 500px;
-            max-height: 400px;
+            max-width: 550px; /* Aumentado um pouco */
+            max-height: 450px; /* Aumentado um pouco */
+            padding: 1rem;
+            background-color: var(--card-bg);
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
         }
         .switch {
             position: relative;
@@ -77,7 +90,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: #ccc;
+            background-color: #9CA3AF; /* Cinza mais suave */
             transition: .4s;
             border-radius: 34px;
         }
@@ -93,105 +106,143 @@
             border-radius: 50%;
         }
         input:checked + .slider {
-            background-color: var(--accent-color-1);
+            background-color: var(--accent-color-1); /* Default */
         }
+        input#zs10-treble-switch:checked + .slider { background-color: var(--accent-color-1); }
+        /* Castor switches use checkboxes, so Tailwind classes handle checked state color */
+        
         input:checked + .slider:before {
             transform: translateX(20px);
         }
         .persona-card.active {
             border-color: var(--accent-color-1);
-            box-shadow: 0 0 15px rgba(77, 182, 172, 0.5);
+            box-shadow: 0 0 0 3px var(--accent-color-1), 0 10px 15px -3px rgba(0,0,0,0.1);
         }
         .fade-in {
-            animation: fadeIn 0.5s ease-in-out;
+            animation: fadeIn 0.6s ease-in-out;
         }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+        .model-selector-btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem; /* text-sm */
+            font-weight: 500; /* font-medium */
+            border-radius: 0.375rem; /* rounded-md */
+            border-width: 1px;
+            transition: all 0.2s ease-in-out;
+        }
+        .model-selector-btn.active {
+            color: white;
+            transform: scale(1.05);
+        }
+        .model-selector-btn:not(.active):hover {
+            opacity: 0.8;
         }
     </style>
 </head>
 <body class="antialiased">
 
-    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+    <header class="bg-white/90 backdrop-blur-lg sticky top-0 z-50 shadow-md">
         <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex-shrink-0">
-                    <h1 class="text-xl font-bold text-gray-800">KZ Guia Interativo</h1>
+                    <h1 class="text-2xl font-bold text-gray-900">KZ Guia Interativo</h1>
                 </div>
                 <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="#overview" class="nav-link px-3 py-2 text-sm font-medium border-b-2 border-transparent">Visão Geral</a>
-                        <a href="#tech-specs" class="nav-link px-3 py-2 text-sm font-medium border-b-2 border-transparent">Comparativo Técnico</a>
-                        <a href="#sound-analysis" class="nav-link px-3 py-2 text-sm font-medium border-b-2 border-transparent">Análise Sonora</a>
-                        <a href="#recommendations" class="nav-link px-3 py-2 text-sm font-medium border-b-2 border-transparent">Recomendações</a>
+                    <div class="ml-10 flex items-baseline space-x-1">
+                        <a href="#overview" class="nav-link px-3 py-2 text-gray-600 hover:text-gray-900 font-medium border-b-2 border-transparent">Visão Geral</a>
+                        <a href="#tech-specs" class="nav-link px-3 py-2 text-gray-600 hover:text-gray-900 font-medium border-b-2 border-transparent">Comparativo Técnico</a>
+                        <a href="#sound-analysis" class="nav-link px-3 py-2 text-gray-600 hover:text-gray-900 font-medium border-b-2 border-transparent">Análise Sonora</a>
+                        <a href="#recommendations" class="nav-link px-3 py-2 text-gray-600 hover:text-gray-900 font-medium border-b-2 border-transparent">Recomendações</a>
                     </div>
                 </div>
             </div>
         </nav>
     </header>
 
-    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16">
 
-        <section id="overview" class="text-center mb-16 md:mb-24">
-            <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Qual o seu som KZ ideal?</h2>
-            <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-600">Compare quatro dos modelos mais populares da Knowledge Zenith e descubra qual se encaixa perfeitamente nas suas preferências auditivas.</p>
+        <section id="overview" class="text-center mb-20 md:mb-28">
+            <h2 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl mb-6">Qual o seu som <span class="text-[var(--accent-color-1)]">KZ</span> ideal?</h2>
+            <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-700 leading-relaxed">Compare os modelos mais populares da Knowledge Zenith e descubra qual se encaixa perfeitamente nas suas preferências auditivas e estilo de vida.</p>
         </section>
 
-        <section id="tech-specs" class="mb-16 md:mb-24">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold tracking-tight text-gray-900">Comparativo Técnico</h2>
-                <p class="mt-2 text-lg text-gray-600">Selecione os modelos para comparar suas especificações lado a lado.</p>
-                <div id="model-selector" class="mt-6 flex justify-center flex-wrap gap-2"></div>
+        <section id="tech-specs" class="mb-20 md:mb-28">
+            <div class="text-center mb-14">
+                <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Comparativo Técnico Detalhado</h2>
+                <p class="mt-3 text-lg text-gray-600">Selecione os modelos para comparar suas especificações lado a lado.</p>
+                <div id="model-selector" class="mt-8 flex justify-center flex-wrap gap-3"></div>
             </div>
 
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
+            <div class="overflow-x-auto bg-white p-2 rounded-xl shadow-lg">
+                <table class="min-w-full divide-y divide-gray-300">
+                    <thead class="bg-gray-100">
                         <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky left-0 bg-gray-50 z-10">Característica</th>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider sticky left-0 bg-gray-100 z-10 rounded-tl-lg">Característica</th>
                         </tr>
                     </thead>
                     <tbody id="tech-table-body" class="bg-white divide-y divide-gray-200">
                     </tbody>
                 </table>
             </div>
-            <p class="text-xs text-center mt-4 text-gray-500">* Informações baseadas em dados de fabricantes e reviews, sujeitas a variações de lote.</p>
+            <p class="text-xs text-center mt-6 text-gray-500">* Informações baseadas em dados de fabricantes e reviews, sujeitas a variações de lote.</p>
         </section>
 
 
-        <section id="sound-analysis" class="mb-16 md:mb-24">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold tracking-tight text-gray-900">Análise Sonora</h2>
-                <p class="mt-2 text-lg text-gray-600">Explore o perfil sonoro de cada modelo. Clique em um modelo para ver sua assinatura no gráfico e a análise detalhada.</p>
-                <div id="sound-model-selector" class="mt-6 flex justify-center flex-wrap gap-4"></div>
+        <section id="sound-analysis" class="mb-20 md:mb-28">
+            <div class="text-center mb-14">
+                <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Análise Sonora Interativa</h2>
+                <p class="mt-3 text-lg text-gray-600">Explore o perfil sonoro de cada modelo. Clique em um modelo para ver sua assinatura no gráfico e a análise detalhada.</p>
+                <div id="sound-model-selector" class="mt-8 flex justify-center flex-wrap gap-4"></div>
             </div>
             
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
                 <div class="chart-container">
                     <canvas id="soundProfileChart"></canvas>
                 </div>
-                <div id="sound-analysis-content" class="fade-in">
-                    <h3 id="sound-model-name" class="text-2xl font-bold mb-4 text-gray-800">Selecione um modelo</h3>
-                    <div id="zs10-controls" class="hidden mb-6 p-4 border rounded-lg bg-gray-50">
-                        <h4 class="font-semibold mb-3 text-gray-700">Ajustes do ZS10 PRO 2</h4>
-                        <div class="flex flex-wrap gap-x-6 gap-y-3 items-center">
-                            <span class="font-medium text-sm">Graves:</span>
-                            <label class="flex items-center space-x-2 cursor-pointer"><input type="radio" name="bass-switch" value="0" checked class="form-radio text-teal-600"><span>Padrão</span></label>
-                            <label class="flex items-center space-x-2 cursor-pointer"><input type="radio" name="bass-switch" value="1" class="form-radio text-teal-600"><span>+1</span></label>
-                            <label class="flex items-center space-x-2 cursor-pointer"><input type="radio" name="bass-switch" value="2" class="form-radio text-teal-600"><span>+2</span></label>
-                            <label class="flex items-center space-x-2 cursor-pointer"><input type="radio" name="bass-switch" value="3" class="form-radio text-teal-600"><span>+3</span></label>
+                <div id="sound-analysis-content" class="fade-in bg-white p-6 rounded-xl shadow-lg">
+                    <h3 id="sound-model-name" class="text-2xl font-bold mb-6 text-gray-800">Selecione um modelo</h3>
+                    <div id="zs10-controls" class="hidden mb-6 p-4 border border-gray-200 rounded-lg bg-gray-50 space-y-4">
+                        <h4 class="font-semibold text-gray-800">Ajustes do ZS10 PRO 2</h4>
+                        <div>
+                            <span class="font-medium text-sm text-gray-700 block mb-2">Graves:</span>
+                            <div class="flex flex-wrap gap-x-4 gap-y-2">
+                                <label class="flex items-center space-x-2 cursor-pointer"><input type="radio" name="zs10-bass-switch" value="0" checked class="form-radio text-[var(--accent-color-1)] focus:ring-[var(--accent-color-1)]"><span>Padrão</span></label>
+                                <label class="flex items-center space-x-2 cursor-pointer"><input type="radio" name="zs10-bass-switch" value="1" class="form-radio text-[var(--accent-color-1)] focus:ring-[var(--accent-color-1)]"><span>+1</span></label>
+                                <label class="flex items-center space-x-2 cursor-pointer"><input type="radio" name="zs10-bass-switch" value="2" class="form-radio text-[var(--accent-color-1)] focus:ring-[var(--accent-color-1)]"><span>+2</span></label>
+                                <label class="flex items-center space-x-2 cursor-pointer"><input type="radio" name="zs10-bass-switch" value="3" class="form-radio text-[var(--accent-color-1)] focus:ring-[var(--accent-color-1)]"><span>+3</span></label>
+                            </div>
                         </div>
-                        <div class="flex flex-wrap gap-x-6 gap-y-2 items-center mt-3">
-                            <span class="font-medium text-sm">Agudos:</span>
-                             <label class="switch">
-                                <input type="checkbox" id="treble-switch">
-                                <span class="slider"></span>
-                            </label>
-                            <span class="ml-2 text-sm text-gray-600">Suavizar (-1 nível)</span>
+                        <div>
+                            <span class="font-medium text-sm text-gray-700 block mb-1">Agudos:</span>
+                            <div class="flex items-center">
+                                 <label class="switch">
+                                    <input type="checkbox" id="zs10-treble-switch">
+                                    <span class="slider"></span>
+                                </label>
+                                <span class="ml-3 text-sm text-gray-600">Suavizar (-1 nível)</span>
+                            </div>
                         </div>
                     </div>
-                    <div id="sound-text-content" class="space-y-4 text-gray-700 leading-relaxed">
+                    <div id="castor-controls" class="hidden mb-6 p-4 border border-gray-200 rounded-lg bg-gray-50 space-y-4">
+                        <h4 class="font-semibold text-gray-800">Ajustes do Castor Pro (Harman)</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3">
+                            <div>
+                                <span class="font-medium text-sm text-gray-700 block mb-2">Graves (Switch 1 & 2):</span>
+                                <label class="flex items-center space-x-2 cursor-pointer mb-1"><input type="checkbox" id="castor-bass-switch1" class="form-checkbox text-[var(--accent-color-5)] focus:ring-[var(--accent-color-5)] rounded"><span>Switch 1 (Graves +1)</span></label>
+                                <label class="flex items-center space-x-2 cursor-pointer"><input type="checkbox" id="castor-bass-switch2" class="form-checkbox text-[var(--accent-color-5)] focus:ring-[var(--accent-color-5)] rounded"><span>Switch 2 (Graves +2 se S1 ON)</span></label>
+                            </div>
+                            <div>
+                                <span class="font-medium text-sm text-gray-700 block mb-2">Médios/Agudos (Switch 3 & 4):</span>
+                                <label class="flex items-center space-x-2 cursor-pointer mb-1"><input type="checkbox" id="castor-midhigh-switch3" class="form-checkbox text-[var(--accent-color-5)] focus:ring-[var(--accent-color-5)] rounded"><span>Switch 3 (Méd/Ag +1)</span></label>
+                                <label class="flex items-center space-x-2 cursor-pointer"><input type="checkbox" id="castor-midhigh-switch4" class="form-checkbox text-[var(--accent-color-5)] focus:ring-[var(--accent-color-5)] rounded"><span>Switch 4 (Méd/Ag +2 se S3 ON)</span></label>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-2">Nota: Efeitos dos switches são baseados em combinações comuns. S2/S4 geralmente potencializam S1/S3 respectivamente.</p>
+                    </div>
+                    <div id="sound-text-content" class="space-y-4 text-gray-700 leading-relaxed text-sm">
                         <p>Use os botões acima para carregar os dados de um fone.</p>
                     </div>
                 </div>
@@ -199,42 +250,48 @@
         </section>
 
         <section id="recommendations">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold tracking-tight text-gray-900">Qual o seu perfil?</h2>
-                <p class="mt-2 text-lg text-gray-600">Descubra qual fone é a recomendação ideal para o seu gosto e necessidade. Clique em um perfil para ver a sugestão.</p>
+            <div class="text-center mb-14">
+                <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Qual o seu perfil?</h2>
+                <p class="mt-3 text-lg text-gray-600">Descubra qual fone é a recomendação ideal para o seu gosto e necessidade. Clique em um perfil para ver a sugestão.</p>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div id="persona-1" class="persona-card card p-6 text-center cursor-pointer rounded-xl">
-                    <div class="text-4xl mb-3">🎧</div>
-                    <h3 class="font-semibold text-lg mb-2">Entusiasta da Versatilidade</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-8">
+                <div id="persona-1" class="persona-card card p-6 text-center cursor-pointer">
+                    <div class="text-5xl mb-4">🎧</div>
+                    <h3 class="font-semibold text-xl mb-2 text-gray-800">Entusiasta da Versatilidade</h3>
                     <p class="text-sm text-gray-600">Gosta de ajustar o som para cada música e busca um fone para tudo, de música a jogos.</p>
                 </div>
-                 <div id="persona-2" class="persona-card card p-6 text-center cursor-pointer rounded-xl">
-                    <div class="text-4xl mb-3">🧐</div>
-                    <h3 class="font-semibold text-lg mb-2">Audiófilo Analítico</h3>
+                 <div id="persona-2" class="persona-card card p-6 text-center cursor-pointer">
+                    <div class="text-5xl mb-4">🧐</div>
+                    <h3 class="font-semibold text-xl mb-2 text-gray-800">Audiófilo Analítico</h3>
                     <p class="text-sm text-gray-600">Prioriza detalhes, clareza e um palco sonoro amplo para uma audição crítica.</p>
                 </div>
-                <div id="persona-3" class="persona-card card p-6 text-center cursor-pointer rounded-xl">
-                    <div class="text-4xl mb-3">⚖️</div>
-                    <h3 class="font-semibold text-lg mb-2">Amante do Som Equilibrado</h3>
+                <div id="persona-3" class="persona-card card p-6 text-center cursor-pointer">
+                    <div class="text-5xl mb-4">⚖️</div>
+                    <h3 class="font-semibold text-xl mb-2 text-gray-800">Amante do Som Equilibrado</h3>
                     <p class="text-sm text-gray-600">Prefere uma sonoridade mais natural e neutra, fugindo de graves e agudos exagerados.</p>
                 </div>
-                 <div id="persona-4" class="persona-card card p-6 text-center cursor-pointer rounded-xl">
-                    <div class="text-4xl mb-3">🚀</div>
-                    <h3 class="font-semibold text-lg mb-2">Iniciante com Energia</h3>
+                 <div id="persona-4" class="persona-card card p-6 text-center cursor-pointer">
+                    <div class="text-5xl mb-4">🚀</div>
+                    <h3 class="font-semibold text-xl mb-2 text-gray-800">Iniciante com Energia</h3>
                     <p class="text-sm text-gray-600">Busca o primeiro bom fone, com som divertido, graves presentes e um ótimo custo-benefício.</p>
                 </div>
+                <div id="persona-5" class="persona-card card p-6 text-center cursor-pointer">
+                    <div class="text-5xl mb-4">🎚️</div>
+                    <h3 class="font-semibold text-xl mb-2 text-gray-800">Moderno e Ajustável</h3>
+                    <p class="text-sm text-gray-600">Busca um som alinhado à curva Harman, com clareza, detalhe e a flexibilidade de ajustes finos via switches.</p>
+                </div>
             </div>
-            <div id="recommendation-details" class="mt-8 p-6 bg-white rounded-xl shadow-lg border border-gray-200 hidden fade-in">
+            <div id="recommendation-details" class="mt-10 p-6 sm:p-8 bg-white rounded-xl shadow-xl border border-gray-200 hidden fade-in">
             </div>
         </section>
 
     </main>
 
-    <footer class="mt-24 bg-gray-100 border-t border-gray-200">
-        <div class="container mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-500">
-            <p>Aplicação interativa criada com base no relatório "Análise Comparativa Detalhada dos IEMs KZ".</p>
-            <p>&copy; 2025 Guia Interativo KZ. Todos os direitos reservados.</p>
+    <footer class="mt-24 bg-gray-800 text-gray-300">
+        <div class="container mx-auto py-8 px-4 sm:px-6 lg:px-8 text-center">
+            <p class="mb-2">Aplicação interativa criada por <a href="https://www.youtube.com/@trickveira" target="_blank" rel="noopener noreferrer" class="font-semibold text-[var(--accent-color-1)] hover:text-emerald-400 underline">TRICKVEIRA</a>.</p>
+            <p class="text-sm">Baseado no relatório "Análise Comparativa Detalhada dos IEMs KZ".</p>
+            <p class="text-xs mt-4">&copy; 2025 Guia Interativo KZ. Todos os direitos reservados.</p>
         </div>
     </footer>
 
@@ -255,10 +312,10 @@
                         },
                         sound: {
                             base: { 'Graves': 6, 'Médios': 6, 'Agudos': 8, 'Palco': 8, 'Detalhes': 8 },
-                            bassLevels: [0, 1.0, 1.5, 2.0],
-                            trebleModifier: -1.0,
+                            bassLevels: [0, 1.0, 1.5, 2.0], 
+                            trebleModifier: -1.0, 
                             description: `
-                                <h4 class="font-bold text-lg mb-2">Som Energético e Customizável</h4>
+                                <h4 class="font-bold text-lg mb-2 text-gray-800">Som Energético e Customizável</h4>
                                 <p class="mb-2"><strong>Geral:</strong> Um som dinâmico com assinatura "V" personalizável via switches. Ótimo para múltiplos usos, incluindo jogos, devido à sua clareza e detalhamento.</p>
                                 <p class="mb-2"><strong>Graves:</strong> Podem variar de controlados a muito impactantes, dependendo da configuração dos switches. Com reforço, tornam-se robustos e satisfatórios.</p>
                                 <p class="mb-2"><strong>Médios:</strong> Podem soar um pouco recuados (típico do V-shape), mas oferecem bom detalhe e resolução para o preço. A coerência entre os drivers é o principal desafio.</p>
@@ -284,7 +341,7 @@
                         sound: {
                             base: { 'Graves': 7, 'Médios': 8, 'Agudos': 6, 'Palco': 6, 'Detalhes': 6 },
                              description: `
-                                <h4 class="font-bold text-lg mb-2">Equilíbrio e Naturalidade</h4>
+                                <h4 class="font-bold text-lg mb-2 text-gray-800">Equilíbrio e Naturalidade</h4>
                                 <p class="mb-2"><strong>Geral:</strong> Representa um afastamento do som "V" tradicional da KZ, buscando um perfil mais equilibrado e neutro-quente, com assinatura em "U" suave. Construção metálica robusta.</p>
                                 <p class="mb-2"><strong>Graves:</strong> Presentes e controlados, com bom corpo e textura, mas sem o impacto avassalador de outros modelos. Focam mais nos médio-graves do que nos sub-graves.</p>
                                 <p class="mb-2"><strong>Médios:</strong> Considerados o ponto forte. São naturais, bem posicionados e detalhados, tornando vocais e instrumentos agradáveis e realistas.</p>
@@ -310,7 +367,7 @@
                         sound: {
                             base: { 'Graves': 5, 'Médios': 9, 'Agudos': 8, 'Palco': 7, 'Detalhes': 9 },
                              description: `
-                                <h4 class="font-bold text-lg mb-2">Foco em Clareza e Resolução</h4>
+                                <h4 class="font-bold text-lg mb-2 text-gray-800">Foco em Clareza e Resolução</h4>
                                 <p class="mb-2"><strong>Geral:</strong> Focado em entregar o máximo de detalhes e clareza. Possui um som mais brilhante e analítico, com ênfase na resolução em detrimento do impacto dos graves.</p>
                                 <p class="mb-2"><strong>Graves:</strong> Intencionalmente contidos e rápidos para não ofuscar as outras frequências. Batem apenas quando a música exige, com precisão e controle.</p>
                                 <p class="mb-2"><strong>Médios:</strong> Altamente detalhados, claros e sem "véus". Vocais femininos e instrumentos acústicos brilham com uma naturalidade impressionante.</p>
@@ -336,7 +393,7 @@
                         sound: {
                             base: { 'Graves': 8, 'Médios': 6, 'Agudos': 7, 'Palco': 5, 'Detalhes': 6 },
                              description: `
-                                <h4 class="font-bold text-lg mb-2">Som Divertido com Ótimo Custo-Benefício</h4>
+                                <h4 class="font-bold text-lg mb-2 text-gray-800">Som Divertido com Ótimo Custo-Benefício</h4>
                                 <p class="mb-2"><strong>Geral:</strong> O clássico som "V-shape" divertido e energético. É o ponto de entrada perfeito para o mundo dos IEMs, com um som que agrada imediatamente a maioria dos ouvintes.</p>
                                 <p class="mb-2"><strong>Graves:</strong> Proeminentes, potentes e com bom impacto. Ideal para gêneros como hip-hop, pop e eletrônica, onde a batida é fundamental.</p>
                                 <p class="mb-2"><strong>Médios:</strong> Recuados em comparação com graves e agudos, mas ainda com presença suficiente para que os vocais soem claros e agradáveis.</p>
@@ -347,6 +404,32 @@
                             personaId: 'persona-4',
                             title: 'Recomendação: KZ EDX PRO X',
                             text: 'Se você está começando no mundo dos fones de alta fidelidade ou tem um orçamento limitado, o EDX PRO X é imbatível. Ele entrega um som animado, com graves fortes e uma energia contagiante que torna qualquer música mais divertida, tudo isso por um preço extremamente acessível.'
+                        }
+                    },
+                    {
+                        id: 'castorpro',
+                        name: 'Castor Pro (Harman)',
+                        color: 'var(--accent-color-5)',
+                        specs: {
+                            'Configuração': '2DD (10mm + 10mm)',
+                            'Impedância (Ω)': '22-40', 
+                            'Sensibilidade (dB)': '101-104', 
+                            'Freq. Resposta (Hz-kHz)': '20-40k'
+                        },
+                        sound: {
+                            base: { 'Graves': 7, 'Médios': 8, 'Agudos': 7, 'Palco': 7, 'Detalhes': 8 },
+                            description: `
+                                <h4 class="font-bold text-lg mb-2 text-gray-800">Som Equilibrado com Toque Harman e Switches</h4>
+                                <p class="mb-2"><strong>Geral:</strong> O Castor Pro (Harman Target) busca um som alinhado à curva Harman, conhecido pelo equilíbrio entre as frequências, com graves presentes mas controlados, médios claros e agudos bem definidos. Possui drivers dinâmicos duplos e 4 switches para ajuste fino (2 para graves, 2 para médios/agudos).</p>
+                                <p class="mb-2"><strong>Graves:</strong> Muito presentes, limpos e com bom sub-grave. Os switches permitem reforçar os graves em até dois níveis, oferecendo impacto sem invadir excessivamente outras frequências.</p>
+                                <p class="mb-2"><strong>Médios:</strong> Nítidos, abertos e bem definidos, buscando uma apresentação natural para vocais e instrumentos. Os switches podem adicionar um leve reforço para maior presença.</p>
+                                <p class="mb-2"><strong>Agudos:</strong> Claros, detalhados e com boa extensão, contribuindo para a percepção de "ar". Podem ser um pouco brilhantes para alguns na configuração padrão, mas os switches também permitem um leve reforço se desejado.</p>
+                                <p><strong>Palco e Detalhes:</strong> Palco sonoro considerado espaçoso para a faixa de preço, com boa separação instrumental. A capacidade de resolução é elogiada, especialmente quando se utiliza equalização ou os ajustes dos switches.</p>`
+                        },
+                        recommendation: {
+                            personaId: 'persona-5',
+                            title: 'Recomendação: KZ Castor Pro (Harman)',
+                            text: 'Se você busca um som moderno, alinhado à curva Harman, com bom equilíbrio entre as frequências, graves impactantes mas controlados, e a flexibilidade de ajustes finos via switches, o Castor Pro é uma excelente pedida. Ideal para quem aprecia clareza, detalhamento e a capacidade de adaptar o som a diferentes gêneros.'
                         }
                     }
                 ],
@@ -360,24 +443,33 @@
             const soundModelSelector = document.getElementById('sound-model-selector');
             const soundModelName = document.getElementById('sound-model-name');
             const soundTextContent = document.getElementById('sound-text-content');
-            const zs10Controls = document.getElementById('zs10-controls');
-            const trebleSwitch = document.getElementById('treble-switch');
-            const bassSwitches = document.querySelectorAll('input[name="bass-switch"]');
             
+            const zs10Controls = document.getElementById('zs10-controls');
+            const zs10TrebleSwitch = document.getElementById('zs10-treble-switch');
+            const zs10BassSwitches = document.querySelectorAll('input[name="zs10-bass-switch"]');
+            
+            const castorControls = document.getElementById('castor-controls');
+            const castorBassSwitch1 = document.getElementById('castor-bass-switch1');
+            const castorBassSwitch2 = document.getElementById('castor-bass-switch2');
+            const castorMidHighSwitch3 = document.getElementById('castor-midhigh-switch3');
+            const castorMidHighSwitch4 = document.getElementById('castor-midhigh-switch4');
+
             const recommendationDetails = document.getElementById('recommendation-details');
 
             let selectedModels = new Set(data.models.map(m => m.id));
             let soundChart = null;
             let activeSoundModel = null;
             
-            function createModelSelectorButton(model, container, onClick) {
+            function createModelSelectorButton(model, container, onClick, isSoundSelector = false) {
                 const button = document.createElement('button');
                 button.dataset.modelId = model.id;
-                button.className = `px-4 py-2 text-sm font-medium rounded-md border transition-all duration-200`;
+                button.className = `model-selector-btn`;
                 button.textContent = model.name;
                 button.style.borderColor = model.color;
+                button.style.color = model.color;
                 
                 function setActive(isActive) {
+                    button.classList.toggle('active', isActive);
                      if (isActive) {
                         button.style.backgroundColor = model.color;
                         button.style.color = 'white';
@@ -403,7 +495,7 @@
                         setActive(selectedModels.has(clickedModel.id));
                         renderTechTable();
                     });
-                     setActive(selectedModels.has(model.id)); // Corrected: use model.id here
+                     setActive(selectedModels.has(model.id));
                 });
                 renderTechTable();
             }
@@ -419,27 +511,39 @@
                 modelsToDisplay.forEach(model => {
                     const th = document.createElement('th');
                     th.scope = 'col';
-                    th.className = 'px-6 py-3 text-left text-xs font-medium uppercase tracking-wider';
+                    th.className = 'px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider';
                     th.style.color = model.color;
                     th.textContent = model.name;
+                    if (modelsToDisplay.indexOf(model) === modelsToDisplay.length - 1) {
+                        th.classList.add('rounded-tr-lg');
+                    }
                     tableHeadRow.appendChild(th);
                 });
 
-                data.techSpecFeatures.forEach(feature => {
+                data.techSpecFeatures.forEach((feature, index) => {
                     const row = document.createElement('tr');
                     const featureCell = document.createElement('td');
-                    featureCell.className = 'px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 sticky left-0 bg-white z-10';
+                    featureCell.className = 'px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 sticky left-0 bg-white z-10';
                     featureCell.textContent = feature;
+                    if (index === data.techSpecFeatures.length -1 && tableHeadRow.children.length === 1) {
+                         featureCell.classList.add('rounded-bl-lg');
+                    }
                     row.appendChild(featureCell);
 
-                    modelsToDisplay.forEach(model => {
+                    modelsToDisplay.forEach((model, modelIndex) => {
                         const valueCell = document.createElement('td');
-                        valueCell.className = 'px-6 py-4 whitespace-nowrap text-sm text-gray-500';
+                        valueCell.className = 'px-6 py-4 whitespace-nowrap text-sm text-gray-600';
                         valueCell.textContent = model.specs[feature] || '-';
+                         if (index === data.techSpecFeatures.length -1 && modelIndex === modelsToDisplay.length -1) {
+                            valueCell.classList.add('rounded-br-lg');
+                        }
                         row.appendChild(valueCell);
                     });
                     tableBody.appendChild(row);
                 });
+                 if (tableBody.lastChild && tableBody.lastChild.firstChild && tableHeadRow.children.length > 1) {
+                    tableBody.lastChild.firstChild.classList.add('rounded-bl-lg');
+                }
             }
 
             function setupSoundAnalysis() {
@@ -450,7 +554,7 @@
                         Object.values(soundButtons).forEach(btnObj => btnObj.setActive(false));
                         setActive(true);
                         updateSoundAnalysis(m.id);
-                    });
+                    }, true);
                     soundButtons[model.id] = { button, setActive };
                 });
 
@@ -468,18 +572,46 @@
                             r: {
                                 beginAtZero: true,
                                 max: 10,
-                                grid: { color: 'rgba(0, 0, 0, 0.1)' },
-                                angleLines: { color: 'rgba(0, 0, 0, 0.1)' },
+                                grid: { color: 'rgba(0, 0, 0, 0.08)' },
+                                angleLines: { color: 'rgba(0, 0, 0, 0.08)' },
                                 pointLabels: {
-                                    font: { size: 14, weight: '500' },
-                                    color: '#4A5568'
+                                    font: { size: 14, weight: '600' },
+                                    color: 'var(--text-color)'
+                                },
+                                ticks: {
+                                    backdropColor: 'rgba(255, 255, 255, 0.75)',
+                                    color: 'var(--text-color)',
+                                    stepSize: 2
                                 }
                             }
                         },
                         plugins: {
-                            legend: { display: false }
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: 'rgba(0,0,0,0.7)',
+                                titleFont: { weight: 'bold'},
+                                bodyFont: { size: 13 },
+                                padding: 10,
+                                cornerRadius: 4
+                            }
                         }
                     }
+                });
+
+                [...zs10BassSwitches, zs10TrebleSwitch].forEach(el => {
+                    el.addEventListener('change', () => {
+                        if(activeSoundModel && activeSoundModel.id === 'zs10pro2') {
+                            updateChartForModel();
+                        }
+                    });
+                });
+                
+                [castorBassSwitch1, castorBassSwitch2, castorMidHighSwitch3, castorMidHighSwitch4].forEach(el => {
+                    el.addEventListener('change', () => {
+                        if(activeSoundModel && activeSoundModel.id === 'castorpro') {
+                            updateChartForModel();
+                        }
+                    });
                 });
             }
             
@@ -488,13 +620,17 @@
                 if (!activeSoundModel) return;
                 
                 soundModelName.textContent = activeSoundModel.name;
+                soundModelName.style.color = activeSoundModel.color;
                 soundTextContent.innerHTML = activeSoundModel.sound.description;
-                soundTextContent.parentElement.classList.remove('fade-in');
-                void soundTextContent.parentElement.offsetWidth;
-                soundTextContent.parentElement.classList.add('fade-in');
+                
+                const analysisContentDiv = document.getElementById('sound-analysis-content');
+                analysisContentDiv.classList.remove('fade-in');
+                void analysisContentDiv.offsetWidth; 
+                analysisContentDiv.classList.add('fade-in');
 
                 zs10Controls.classList.toggle('hidden', modelId !== 'zs10pro2');
-
+                castorControls.classList.toggle('hidden', modelId !== 'castorpro');
+                
                 updateChartForModel();
             }
 
@@ -504,25 +640,47 @@
                 let soundData = {...activeSoundModel.sound.base};
 
                 if (activeSoundModel.id === 'zs10pro2') {
-                    const bassLevel = parseInt(document.querySelector('input[name="bass-switch"]:checked').value);
-                    const isTrebleTuned = trebleSwitch.checked;
+                    const bassLevel = parseInt(document.querySelector('input[name="zs10-bass-switch"]:checked').value);
+                    const isTrebleTuned = zs10TrebleSwitch.checked;
                     
                     soundData['Graves'] += activeSoundModel.sound.bassLevels[bassLevel];
                     if(isTrebleTuned) {
                         soundData['Agudos'] += activeSoundModel.sound.trebleModifier;
                     }
+                } else if (activeSoundModel.id === 'castorpro') {
+                    let bassBoost = 0;
+                    if (castorBassSwitch1.checked) bassBoost += 1;
+                    if (castorBassSwitch2.checked && castorBassSwitch1.checked) bassBoost = 2; 
+                    else if (castorBassSwitch2.checked && !castorBassSwitch1.checked) bassBoost = 0; // S2 alone is not standard level 2
+
+                    let midHighBoost = 0;
+                    if (castorMidHighSwitch3.checked) midHighBoost += 1;
+                    if (castorMidHighSwitch4.checked && castorMidHighSwitch3.checked) midHighBoost = 2;
+                    else if (castorMidHighSwitch4.checked && !castorMidHighSwitch3.checked) midHighBoost = 0;
+
+
+                    soundData['Graves'] += bassBoost;
+                    soundData['Médios'] += midHighBoost;
+                    soundData['Agudos'] += midHighBoost;
                 }
                 
+                for (const key in soundData) {
+                    if (soundData[key] < 0) soundData[key] = 0;
+                    if (soundData[key] > 10) soundData[key] = 10;
+                }
+
                 const dataset = {
                     label: activeSoundModel.name,
                     data: Object.values(soundData),
-                    backgroundColor: hexToRgba(activeSoundModel.color, 0.2),
+                    backgroundColor: hexToRgba(activeSoundModel.color, 0.25),
                     borderColor: activeSoundModel.color,
-                    borderWidth: 2,
+                    borderWidth: 2.5,
                     pointBackgroundColor: activeSoundModel.color,
                     pointBorderColor: '#fff',
                     pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: activeSoundModel.color
+                    pointHoverBorderColor: activeSoundModel.color,
+                    pointRadius: 4,
+                    pointHoverRadius: 6
                 };
 
                 soundChart.data.datasets = [dataset];
@@ -540,26 +698,21 @@
                         if (recommendedModel) {
                             const recommendation = recommendedModel.recommendation;
                             recommendationDetails.innerHTML = `
-                                <h3 class="font-bold text-xl mb-2" style="color: ${recommendedModel.color};">${recommendation.title}</h3>
-                                <p class="text-gray-700">${recommendation.text}</p>
+                                <h3 class="font-bold text-2xl mb-3" style="color: ${recommendedModel.color};">${recommendation.title}</h3>
+                                <p class="text-gray-700 leading-relaxed">${recommendation.text}</p>
                             `;
                             recommendationDetails.classList.remove('hidden');
                         } else {
-                             recommendationDetails.innerHTML = '<p class="text-gray-700">Recomendação não encontrada.</p>';
+                             recommendationDetails.innerHTML = '<p class="text-gray-700 leading-relaxed">Recomendação não encontrada para este perfil.</p>';
                              recommendationDetails.classList.remove('hidden');
                         }
+                        recommendationDetails.classList.remove('fade-in');
+                        void recommendationDetails.offsetWidth;
+                        recommendationDetails.classList.add('fade-in');
                     });
                 });
             }
             
-            [...bassSwitches, trebleSwitch].forEach(el => {
-                el.addEventListener('change', () => {
-                    if(activeSoundModel && activeSoundModel.id === 'zs10pro2') {
-                        updateChartForModel();
-                    }
-                });
-            });
-
             function hexToRgba(hex, alpha) {
                 let r = 0, g = 0, b = 0;
                 if (hex.match(/^#([A-Fa-f0-9]{3}){1,2}$/)) {
@@ -590,23 +743,31 @@
             setupSoundAnalysis();
             setupRecommendations();
 
-            const sections = document.querySelectorAll('section');
-            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('main section'); 
+            const navLinks = document.querySelectorAll('header nav a'); 
             window.onscroll = () => {
                 let current = '';
                 sections.forEach(section => {
                     const sectionTop = section.offsetTop;
-                    if(pageYOffset >= sectionTop - 80) {
+                    if(pageYOffset >= sectionTop - 90) { 
                         current = section.getAttribute('id');
                     }
                 });
+
                 navLinks.forEach(link => {
                     link.classList.remove('active');
-                    if(link.getAttribute('href').includes(current)) {
+                    if(link.getAttribute('href') === `#${current}`) { 
                         link.classList.add('active');
                     }
-                })
+                });
+                if (!current && navLinks.length > 0) {
+                    const overviewLink = Array.from(navLinks).find(link => link.getAttribute('href') === '#overview');
+                    if (overviewLink) {
+                        overviewLink.classList.add('active');
+                    }
+                }
             }
+            window.dispatchEvent(new Event('scroll'));
         });
     </script>
 </body>
